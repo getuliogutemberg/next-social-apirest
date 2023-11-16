@@ -29,13 +29,20 @@ const db = firebaseAdmin.firestore();
 
 
 app.listen(PORT, () => {
+  console.log(`Seja Bem-Vindo ao Capybaquigrafo API REST`);
   console.log('Servidor está ouvindo na porta :' + PORT);
+  console.log(__dirname );
+  console.log(" ");
+  console.log("Estes sao os endpoints disponíveis:");
+  console.log(" ");
+  console.log(__dirname+ PORT + "/api/data");
+  console.log(__dirname + PORT + "/api/data/:id");
+  console.log(__dirname + PORT + "/api/itens");
+  console.log(__dirname + PORT + "/api/itens/:id");
+  console.log(" ");
 });
 
-// boas vindas do servidor no console com a porta
-app.init = () => {
-  console.log(`Seja Bem-Vindo ao Capybaquigrafo API REST`);
-}
+
 
 // Rota inicial
 app.get('/', (req, res) => {
