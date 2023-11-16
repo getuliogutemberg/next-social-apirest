@@ -34,3 +34,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+next-social-app-a9933-firebase-adminsdk-9kw8q-b8763954a7.json
