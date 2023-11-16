@@ -90,14 +90,20 @@ function formatApiInstructions(apiInstructions) {
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
+      flex-direction: row;
       font-family: sans-serif;
       }
       i { color: #333;
+    
       }
       h3 { font-family: sans-serif;
         color: #333;
       }
+      button { margin: 0px;
+        font-family: sans-serif;
+        font-size: 1em;
+      }
+
       ul { list-style-type: none; padding: 0;
 }
       li { font-family: sans-serif;margin-bottom: 20px; }
@@ -112,19 +118,28 @@ function formatApiInstructions(apiInstructions) {
          }
       .grafo { color: #4CAF50; }
       .endpointcategory {  padding: 50px;
-        border: 1px solid #ccc; }
+        border: 1px solid #ccc;
+      max-width: 600px;
+    wrap: break-word;}
       .endpoint { color: #555;
         }
+      .body { background-color: #888;padding: 10px;border: 1px solid #333;
+       font-style: italic;
+       wrap: break-word;
+      overflow-wrap: break-word; }
       .instructions { display: flex;
-        justify-content: center; }
-      .method { margin: 20px; background-color: #eee; padding: 5px 10px; border-radius: 5px; }
+        
+        justify-content: end; }
+      .method { margin: 0 10px; background-color: #eee; padding: 5px 10px; border-radius: 5px; }
       .method.get { background-color: #4CAF50; color: white; }
       .method.post { background-color: #2196F3; color: white; }
       .method.put { background-color: #FF9800; color: white; }
       .method.delete { background-color: #E91E63; color: white; }
-      .endpoints { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-around; max-width: 800px; margin: 50px auto; }
+      .method:hover { cursor: pointer; }
+      .endpoints { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: start; margin: 50px auto; gap: 50px; }
     </style>
-    <h1>Bem-vindo à APIREST - <span class="capyba">Capyba</span><span class="grafo">quígrafo</span></h1>
+    <h1>Bem-vindo à APIREST </h1>
+    <h1><span class="capyba">Capyba<span class="grafo">quígrafo</span></span></h1>
     <br>
     <i class="instructions">${apiInstructions.instructions}</i>
     <br>
@@ -140,15 +155,18 @@ function formatApiInstructions(apiInstructions) {
     `;
 
     for (const route in apiInstructions.routes[category]) {
-      const { description, method, endpoint } = apiInstructions.routes[category][route];
-      const path = apiInstructions.path + endpoint;
+      const { description, method, endpoint ,param, body} = apiInstructions.routes[category][route];
+      const path = apiInstructions.path.slice(0, -1) + endpoint;
+      
       formattedMessage += `
         <li key=${route}>
-          <i>${description}</i>: 
-          <br> 
-          <br>
-          <b class=" method ${method.toLowerCase()}">${method}</b> <span class="endpoint">${path}</span>
-          <br>
+          
+          
+          
+          
+          <p><a href="${path}${param !== undefined ? param :'' }" class=" method ${method.toLowerCase()}">${method}</a>${path} ${param === undefined ? '' : `<input type="text" value="${param}">`}</p>
+          ${body !== undefined ? `Body:<p class="body"> ${JSON.stringify(body)}</p>` : ''}
+          <i>${description}</i>
         </li>
       `;
     }
@@ -167,7 +185,7 @@ app.get('/', (req, res) => {
   
   const apiInstructions = {
     title: "APIREST - Capybaquigrafo",
-    path: req.path,
+    path: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
     message: "Bem-vindo à APIREST - Capybaquigrafo",
     instructions: "Esta é uma API REST que oferece recursos para gerenciar usuários e posts.",
     routes: {
@@ -176,26 +194,45 @@ app.get('/', (req, res) => {
           description: "Obter todos os usuários",
           method: "GET",
           endpoint: "/users",
+
+          
         },
         getById: {
           description: "Obter um usuário por ID",
           method: "GET",
-          endpoint: "/users/:id",
+          param: ":id",
+          endpoint: `/users/`,
+          
         },
         add: {
           description: "Adicionar um novo usuário",
           method: "POST",
           endpoint: "/users/add",
+          
+          body: {
+            name: "string",
+            email: "string",
+            password: "string",
+            imageURL: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+          }
         },
         update: {
           description: "Atualizar um usuário por ID",
           method: "PUT",
-          endpoint: "/users/update/:id",
+          endpoint: "/users/update/",
+          param: ":id",
+          body: {
+            name: "string",
+            email: "string",
+            password: "string",
+            imageURL: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+          }
         },
         delete: {
           description: "Excluir um usuário por ID",
           method: "DELETE",
-          endpoint: "/users/delete/:id",
+          endpoint: "/users/delete/",
+          param: ":id",
         },
       },
       posts: {
@@ -203,26 +240,53 @@ app.get('/', (req, res) => {
           description: "Obter todos os posts",
           method: "GET",
           endpoint: "/posts",
+         
         },
         getById: {
           description: "Obter um post por ID",
           method: "GET",
-          endpoint: "/posts/:id",
+          endpoint: "/posts/",
+          param: ":id",
+          
         },
         add: {
           description: "Adicionar um novo post",
           method: "POST",
           endpoint: "/posts/add",
+         
+          body: {
+            title: "string",
+            content: "string",
+            imageURL: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+            createdBy: {
+              name: "string",
+              email: "string",
+              imageURL: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+            },
+          }
         },
         update: {
           description: "Atualizar um post por ID",
           method: "PUT",
-          endpoint: "/posts/update/:id",
+          endpoint: "/posts/update/",
+          param: ":id",
+          body: {
+            title: "string",
+            content: "string",
+            imageURL: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+            createdBy: {
+              name: "string",
+              email: "string",
+              imageURL: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+            },
+          }
         },
         delete: {
           description: "Excluir um post por ID",
           method: "DELETE",
-          endpoint: "/posts/delete/:id",
+          endpoint: "/posts/delete/",
+          param: ":id",
+          
         },
       },
     },
@@ -249,10 +313,23 @@ app.get('/users', async (req, res) => {
 app.post('/users/add', async (req, res) => {
   try {
     const user = req.body;
-    const doc = await db.collection('users').add(user);
-    if (!doc) {
-      res.status(409).send('Este usuaário ja existe');
+    if (!user.name || !user.email || !user.password) {
+      res.status(400).send('Todos os campos devem ser preenchidos');
+      return
     }
+    const isDuplicate = await db.collection('users').where('email', '==', user.email).get();
+    if (isDuplicate.docs.length > 0) {
+      res.status(409).send('Este usuaário ja existe');
+      return
+    }
+
+    const newUser = await db.collection('users').add(user);
+    if (!newUser) {
+      res.status(409).send('Este usuaário ja existe');
+      return
+    }
+    // adiciona chave id no objeto
+    await db.collection('users').doc(newUser).update({ id: newUser });
     res.status(201).json({ id: doc.id, ...user });
   } catch (error) {
     console.error(error);
