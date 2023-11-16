@@ -73,6 +73,10 @@ app.listen(PORT, () => {
   console.log('Servidor está ouvindo na porta :' + PORT);
 });
 
+// boas vindas do servidor no console com a porta
+app.init = () => {
+  console.log(`Seja Bem-Vindo ao Capybaquigrafo API REST`);
+}
 // Endpoint para obter todos os itens do banco de dados
 app.get('/api/itens', async (req, res) => {
   const snapshot = await db.collection('users').get();
