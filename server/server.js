@@ -1,8 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const firebaseAdmin = require('firebase-admin');
-
 
 const app = express();
 app.use(bodyParser.json());
@@ -14,7 +14,13 @@ const PORT = 3001;
 
 
 // Configurar Firebase Admin SDK
-const serviceAccount = require('../next-social-app-a9933-firebase-adminsdk-9kw8q-b8763954a7.json');
+const serviceAccount = {
+  type: 'service_account',
+  project_id: process.env.FIREBASE_PROJECT_ID,
+  private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+  client_email: process.env.FIREBASE_CLIENT_EMAIL,
+};
+
 firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert(serviceAccount),
 });
