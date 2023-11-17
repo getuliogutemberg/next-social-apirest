@@ -44,55 +44,65 @@ const db = firebaseAdmin.firestore();
 
 app.listen(PORT, () => {
   console.log(`Seja Bem-Vindo ao Capybaquigrafo API REST`);
-  console.log('Servidor está ouvindo na porta :' + PORT);
-  console.log(__dirname );
+  console.log(`Servidor está ouvindo na porta: ${PORT}`);
+ 
   console.log(" ");
-  console.log("Estes sao os endpoints disponíveis:");
-  console.log(" ");
-  console.log("GET /api/data");
-  console.log("      Esta rota server para obter todos os dados");
-  console.log("GET /api/data/:id");
-  console.log("      Esta rota server para obter todos os dados");
-  console.log("POST /api/data");
-  console.log("      Esta rota server para obter todos os dados");
-  console.log("PUT /api/data/:id");
-  console.log("      Esta rota server para obter todos os dados");
-  console.log("DELETE /api/data/:id");
-  console.log("      Esta rota server para obter todos os dados");
-  console.log(" ");
-  console.log("GET /api/data");
-  console.log("      Esta rota server para obter todos os dados");
-  console.log("GET /api/data/:id");
-  console.log("      Esta rota server para obter todos os dados");
-  console.log("POST /api/data");
-  console.log("      Esta rota server para obter todos os dados");
-  console.log("PUT /api/data/:id");
-  console.log("      Esta rota server para obter todos os dados");
-  console.log("DELETE /api/data/:id");
-  console.log("      Esta rota server para obter todos os dados");
-  console.log(" "); console.log("GET /api/data");
-  console.log("      Esta rota server para obter todos os dados");
-  console.log("GET /api/data/:id");
-  console.log("      Esta rota server para obter todos os dados");
-  console.log("POST /api/data");
-  console.log("      Esta rota server para obter todos os dados");
-  console.log("PUT /api/data/:id");
-  console.log("      Esta rota server para obter todos os dados");
-  console.log("DELETE /api/data/:id");
-  console.log("      Esta rota server para obter todos os dados");
-  console.log(" "); console.log("GET /api/data");
-  console.log("      Esta rota server para obter todos os dados");
-  console.log("GET /api/data/:id");
-  console.log("      Esta rota server para obter todos os dados");
-  console.log("POST /api/data");
-  console.log("      Esta rota server para obter todos os dados");
-  console.log("PUT /api/data/:id");
-  console.log("      Esta rota server para obter todos os dados");
-  console.log("DELETE /api/data/:id");
-  console.log("      Esta rota server para obter todos os dados");
+  console.log("Estes são os endpoints disponíveis:");
   console.log(" ");
 
+  // Rotas para a categoria "users"
+  console.log("Usuários:");
+  console.log("GET /users - Obter todos os usuários");
+  console.log("GET /users/:id - Obter um usuário por ID");
+  console.log("POST /users/add - Adicionar um novo usuário");
+  console.log("  Corpo da Requisição: { name: 'string', email: 'string', password: 'string', imageURL: 'string (URL)' }");
+  console.log("PUT /users/update/:id - Atualizar um usuário por ID");
+  console.log("  Corpo da Requisição: { name: 'string', email: 'string', password: 'string', imageURL: 'string (URL)' }");
+  console.log("DELETE /users/delete/:id - Excluir um usuário por ID");
+  console.log(" ");
+
+  // Rotas para a categoria "posts"
+  console.log("Posts:");
+  console.log("GET /posts - Obter todos os posts");
+  console.log("GET /posts/:id - Obter um post por ID");
+  console.log("POST /posts/add - Adicionar um novo post");
+  console.log("  Corpo da Requisição: { title: 'string', content: 'string', imageURL: 'string (URL)', createdBy: { name: 'string', email: 'string', imageURL: 'string (URL)' } }");
+  console.log("PUT /posts/update/:id - Atualizar um post por ID");
+  console.log("  Corpo da Requisição: { title: 'string', content: 'string', imageURL: 'string (URL)', createdBy: { name: 'string', email: 'string', imageURL: 'string (URL)' } }");
+  console.log("DELETE /posts/delete/:id - Excluir um post por ID");
+  console.log(" ");
+
+  // Rotas para a categoria "secrets"
+  console.log("Secrets:");
+  console.log("GET /secrets - Obter todos os posts secretos");
+  console.log("GET /secrets/:id - Obter um post secreto por ID");
+  console.log("POST /secrets/add - Adicionar um novo post secreto");
+  console.log("  Corpo da Requisição: { title: 'string', content: 'string', imageURL: 'string (URL)', createdBy: { name: 'string', email: 'string', imageURL: 'string (URL)' } }");
+  console.log("PUT /secrets/update/:id - Atualizar um post secreto por ID");
+  console.log("  Corpo da Requisição: { title: 'string', content: 'string', imageURL: 'string (URL)', createdBy: { name: 'string', email: 'string', imageURL: 'string (URL)' } }");
+  console.log("DELETE /secrets/delete/:id - Excluir um post secreto por ID");
+  console.log(" ");
+
+  // Rotas para "PDFDOC"
+  console.log("PDF e Documentos:");
+  console.log("POST /upload - Fazer upload de um documento PDF");
+  console.log("  Corpo da Requisição: Formato Multipart com o arquivo PDF");
+  console.log("GET /pdf/termos - Obter o documento PDF de termos");
+  console.log(" ");
+
+  // Rotas para "AUTHENTICATION"
+  console.log("Autenticação:");
+  console.log("POST /login - Efetuar login");
+  console.log("  Corpo da Requisição: { email: 'string', password: 'string' }");
+  console.log("POST /logout - Efetuar logout");
+  console.log("  Corpo da Requisição: { email: 'string' }");
+  console.log("POST /send-validation-email - Enviar e-mail de validação");
+  console.log("  Corpo da Requisição: { email: 'string' }");
+  console.log("POST /validate-email - Validar e-mail");
+  console.log("  Corpo da Requisição: { token: 'string' }");
+  console.log(" ");
 });
+
 
 
 // Função para formatar as instruções da API
@@ -150,7 +160,7 @@ function formatApiInstructions(apiInstructions) {
       .method.put { background-color: #FF9800; color: white; }
       .method.delete { background-color: #E91E63; color: white; }
       .method:hover { cursor: pointer; }
-      .endpoints { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: start; margin: 50px auto; gap: 50px; }
+      .endpoints { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; margin: 50px auto; gap: 50px; }
     </style>
     <h1>Bem-vindo à APIREST </h1>
     <h1><span class="capyba">Capyba<span class="grafo">quígrafo</span></span></h1>
