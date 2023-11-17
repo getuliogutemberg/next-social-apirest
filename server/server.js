@@ -178,7 +178,7 @@ function formatApiInstructions(apiInstructions) {
           
           
           
-          <p><a href="${path}${param !== undefined ? param :'' }" class=" method ${method.toLowerCase()}">${method}</a>${path} ${param === undefined ? '' : `<input type="text" value="${param}">`}</p>
+          <p><a href="${path}${param !== undefined ? param :'' }" class=" method ${method.toLowerCase()}">${method}</a>${path}</p>
           ${body !== undefined ? `Body:<p class="body"> ${JSON.stringify(body)}</p>` : ''}
           <i>${description}</i>
         </li>
@@ -203,7 +203,8 @@ app.get('/', (req, res) => {
     message: "Bem-vindo à APIREST - Capybaquigrafo",
     instructions: "Esta é uma API REST que oferece recursos para gerenciar usuários e posts.",
     routes: {
-      upload: {
+      
+      Pdfdoc: {
         postFile: {
           description: "Enviar arquivo",
           method: "POST",
@@ -212,8 +213,6 @@ app.get('/', (req, res) => {
             file: "file (PDF)",
           },
         },
-      },
-      download: {
         getPdf: {
           description: "Obter arquivo PDF",
           method: "GET",
@@ -352,6 +351,55 @@ app.get('/', (req, res) => {
           description: "Obter todos os posts secretos",
           method: "GET",
           endpoint: "/secrets",
+          queryParameters: {
+            page_size: "number (opcional)",
+            page: "number (opcional)",
+            search: "string (opcional)",
+            ordering: "string (opcional)",
+          },
+        },
+        getById: {
+          description: "Obter um post secreto por ID",
+          method: "GET",
+          endpoint: "/secrets/:id",
+          param: ":id",
+        },
+        add: {
+          description: "Adicionar um novo post secreto",
+          method: "POST",
+          endpoint: "/secrets/add",
+          body: {
+            title: "string",
+            content: "string",
+            imageURL: "string (URL)",
+            createdBy: {
+              name: "string",
+              email: "string",
+              imageURL: "string (URL)",
+            },
+          },
+        },
+        update: {
+          description: "Atualizar um post secreto por ID",
+          method: "PUT",
+          endpoint: "/secrets/update/:id",
+          param: ":id",
+          body: {
+            title: "string",
+            content: "string",
+            imageURL: "string (URL)",
+            createdBy: {
+              name: "string",
+              email: "string",
+              imageURL: "string (URL)",
+            },
+          },
+        },
+        delete: {
+          description: "Excluir um post secreto por ID",
+          method: "DELETE",
+          endpoint: "/secrets/delete/:id",
+          param: ":id",
         },
       },
     },
@@ -676,55 +724,7 @@ app.get('/posts', async (req, res) => {
 });
 
 
-// Endpoint para obter posts com nível igual a 1 paginados e filtrados por termo de busca, filtro e ordenação
-app.get('/secrets', async (req, res) => {
-  try {
-    const pageSize = parseInt(req.query.page_size) || 10; // Tamanho padrão da página
-    const page = parseInt(req.query.page) || 1; // Página padrão
-    const searchTerm = req.query.search || ''; // Termo de busca padrão
-    
-    const orderingFields = req.query.ordering || ''; // Campos de ordenação padrão
 
-    // Construir a consulta
-    let query = db.collection('posts').where('level', '==', 1);
-
-    // Aplicar filtro de pesquisa se houver um termo
-    if (searchTerm) {
-      query = query.where('searchField', '>=', searchTerm).where('searchField', '<=', searchTerm + '\uf8ff');
-    }
-
-
-    // Aplicar ordenação se fornecido
-    if (orderingFields) {
-      const orderingArray = orderingFields.split(',');
-      orderingArray.forEach(field => {
-        let order = 'asc';
-        if (field.startsWith('-')) {
-          order = 'desc';
-          field = field.substring(1); // Remover o sinal de menos
-        }
-        query = query.orderBy(field, order);
-      });
-    }
-
-    const totalSnapshot = await query.get();
-
-    // Aplicar limites e offset para a paginação
-    const snapshot = await query.limit(pageSize).offset((page - 1) * pageSize).get();
-
-    const totalItems = totalSnapshot.docs.length;
-    const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-    res.json({
-      total_items: totalItems,
-      items: data,
-    }).status(200);
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Erro ao obter os dados');
-  }
-});
 
 
 // Endpoint para adicionar um novo post
@@ -781,3 +781,104 @@ app.delete('/posts/delete/:id', async (req, res) => {
 });
 
 
+// Endpoint para obter todos os posts secretos paginados e filtrados por termo de busca, filtro e ordenação
+app.get('/secrets', async (req, res) => {
+  try {
+    const pageSize = parseInt(req.query.page_size) || 10; // Tamanho padrão da página
+    const page = parseInt(req.query.page) || 1; // Página padrão
+    const searchTerm = req.query.search || ''; // Termo de busca padrão
+    
+    const orderingFields = req.query.ordering || ''; // Campos de ordenação padrão
+
+    // Construir a consulta
+    let query = db.collection('posts').where('level', '==', 1);
+
+    // Aplicar filtro de pesquisa se houver um termo
+    if (searchTerm) {
+      query = query.where('searchField', '>=', searchTerm).where('searchField', '<=', searchTerm + '\uf8ff');
+    }
+
+    // Aplicar ordenação se fornecido
+    if (orderingFields) {
+      const orderingArray = orderingFields.split(',');
+      orderingArray.forEach(field => {
+        let order = 'asc';
+        if (field.startsWith('-')) {
+          order = 'desc';
+          field = field.substring(1); // Remover o sinal de menos
+        }
+        query = query.orderBy(field, order);
+      });
+    }
+
+    const totalSnapshot = await query.get();
+
+    // Aplicar limites e offset para a paginação
+    const snapshot = await query.limit(pageSize).offset((page - 1) * pageSize).get();
+
+    const totalItems = totalSnapshot.docs.length;
+    const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+    res.json({
+      total_items: totalItems,
+      items: data,
+    }).status(200);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erro ao obter os dados');
+  }
+});
+
+// Endpoint para obter um post secreto por ID
+app.get('/secrets/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const doc = await db.collection('posts').doc(id).get();
+    if (!doc.exists || doc.data().level !== 1) {
+      res.status(404).send('Post secreto não encontrado');
+    } else {
+      res.json({ id: doc.id, ...doc.data() }).status(200);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erro ao obter os dados');
+  }
+});
+
+// Endpoint para adicionar um novo post secreto
+app.post('/secrets/add', async (req, res) => {
+  try {
+    const newPost = req.body;
+    newPost.level = 1; // Define o nível como 1 (secreto)
+    const postRef = await db.collection('posts').add(newPost);
+    if (!postRef) {
+      res.status(409).send('Este post secreto já existe');
+    }
+    res.status(201).json({ id: postRef.id, ...newPost });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erro ao adicionar o post secreto');
+  }
+});
+
+// Endpoint para atualizar um post secreto por ID
+app.put('/secrets/update/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updatedPost = req.body;
+    updatedPost.level = 1; // Garante que o nível seja sempre 1 (secreto)
+    await db.collection('posts').doc(id).set(updatedPost, { merge: true });
+    res.status(200).json({ id, ...updatedPost });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erro ao atualizar o post secreto');
+  }
+});
+
+// Rota para excluir um post secreto por ID
+app.delete('/secrets/delete/:id', async (req, res) => {
+  const id = req.params.id;
+  await db.collection('posts').doc(id).delete();
+  res.json({ id }).status(200);
+});
