@@ -3,6 +3,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const firebaseAdmin = require('firebase-admin');
+const multer = require('multer');
+const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 app.use(bodyParser.json());
@@ -11,6 +14,15 @@ app.use(bodyParser.json());
 app.use(cors());
 
 const PORT = 3001;
+
+// Configuração do nodemailer (substitua com suas configurações reais)
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'capybaquigrafo@gmail.com',
+    pass: 'capyba23',
+  },
+});
 
 
 // Configurar Firebase Admin SDK
@@ -23,6 +35,8 @@ const serviceAccount = {
 
 firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert(serviceAccount),
+  storageBucket: 'next-social-app-a9933.appspot.com',
+
 });
 
 const db = firebaseAdmin.firestore();
@@ -189,49 +203,97 @@ app.get('/', (req, res) => {
     message: "Bem-vindo à APIREST - Capybaquigrafo",
     instructions: "Esta é uma API REST que oferece recursos para gerenciar usuários e posts.",
     routes: {
+      upload: {
+        postFile: {
+          description: "Enviar arquivo",
+          method: "POST",
+          endpoint: "/upload",
+          body: {
+            file: "file (PDF)",
+          },
+        },
+      },
+      download: {
+        getPdf: {
+          description: "Obter arquivo PDF",
+          method: "GET",
+          endpoint: "/pdf/termos",
+        },
+      },
+      authentication: {
+        login: {
+          description: "Login",
+          method: "POST",
+          endpoint: "/login",
+          body: {
+            email: "string",
+            password: "string",
+          },
+        },
+        logout: {
+          description: "Logout",
+          method: "POST",
+          endpoint: "/logout",
+          body: {
+            email: "string",
+          },
+        },
+        validateEmail: {
+          description: "Validar e-mail",
+          method: "POST",
+          endpoint: "/validate-email",
+          body: {
+            token: "string",
+          },
+        },
+        sendValidationEmail: {
+          description: "Enviar e-mail de validação",
+          method: "POST",
+          endpoint: "/send-validation-email",
+          body: {
+            email: "string",
+          },
+        },
+      },
       users: {
         getAll: {
           description: "Obter todos os usuários",
           method: "GET",
           endpoint: "/users",
-
-          
         },
         getById: {
           description: "Obter um usuário por ID",
           method: "GET",
           param: ":id",
-          endpoint: `/users/`,
-          
+          endpoint: "/users/:id",
         },
         add: {
           description: "Adicionar um novo usuário",
           method: "POST",
           endpoint: "/users/add",
-          
           body: {
             name: "string",
             email: "string",
             password: "string",
-            imageURL: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
-          }
+            imageURL: "string (URL)",
+          },
         },
         update: {
           description: "Atualizar um usuário por ID",
           method: "PUT",
-          endpoint: "/users/update/",
+          endpoint: "/users/update/:id",
           param: ":id",
           body: {
             name: "string",
             email: "string",
             password: "string",
-            imageURL: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
-          }
+            imageURL: "string (URL)",
+          },
         },
         delete: {
           description: "Excluir um usuário por ID",
           method: "DELETE",
-          endpoint: "/users/delete/",
+          endpoint: "/users/delete/:id",
           param: ":id",
         },
       },
@@ -240,63 +302,188 @@ app.get('/', (req, res) => {
           description: "Obter todos os posts",
           method: "GET",
           endpoint: "/posts",
-         
         },
         getById: {
           description: "Obter um post por ID",
           method: "GET",
-          endpoint: "/posts/",
+          endpoint: "/posts/:id",
           param: ":id",
-          
         },
         add: {
           description: "Adicionar um novo post",
           method: "POST",
           endpoint: "/posts/add",
-         
           body: {
             title: "string",
             content: "string",
-            imageURL: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+            imageURL: "string (URL)",
             createdBy: {
               name: "string",
               email: "string",
-              imageURL: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+              imageURL: "string (URL)",
             },
-          }
+          },
         },
         update: {
           description: "Atualizar um post por ID",
           method: "PUT",
-          endpoint: "/posts/update/",
+          endpoint: "/posts/update/:id",
           param: ":id",
           body: {
             title: "string",
             content: "string",
-            imageURL: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+            imageURL: "string (URL)",
             createdBy: {
               name: "string",
               email: "string",
-              imageURL: "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
+              imageURL: "string (URL)",
             },
-          }
+          },
         },
         delete: {
           description: "Excluir um post por ID",
           method: "DELETE",
-          endpoint: "/posts/delete/",
+          endpoint: "/posts/delete/:id",
           param: ":id",
-          
+        },
+      },
+      secrets: {
+        getAll: {
+          description: "Obter todos os posts secretos",
+          method: "GET",
+          endpoint: "/secrets",
         },
       },
     },
   };
+  
+  
 
   const formattedInstructions = formatApiInstructions(apiInstructions);
   
 
   res.status(200).send(formattedInstructions);
 });
+
+// Configuração do multer
+const storage = multer.memoryStorage(); // Armazena os arquivos em memória
+const upload = multer({ storage: storage });
+
+const bucket = firebaseAdmin.storage().bucket();
+
+app.post('/upload', upload.single('file'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).send('Nenhum arquivo foi enviado.');
+    }
+
+    const file = req.file;
+    const fileName = `termos-condicoes.pdf`;
+    const fileUpload = bucket.file(fileName);
+
+    const stream = fileUpload.createWriteStream({
+      metadata: {
+        contentType: file.mimetype,
+      },
+    });
+
+    stream.on('error', (err) => {
+      console.error(err);
+      res.status(500).send('Erro durante o upload do arquivo.');
+    });
+
+    stream.on('finish', async () => {
+      res.status(200).send(`Arquivo ${fileName} carregado com sucesso.`);
+    });
+
+    stream.end(file.buffer);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erro durante o upload do arquivo.');
+  }
+});
+
+// Endpoint para obter um arquivo PDF
+app.get('/pdf/termos', async (req, res) => {
+  try {
+    const fileName = 'termos-condicoes.pdf';
+    const file = bucket.file(fileName);
+
+    const downloadStream = file.createReadStream();
+    downloadStream.pipe(res);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erro ao obter o arquivo');
+  }
+});
+
+
+// EndPoint de login
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Consulta o usuário no Firestore
+    const userRef = db.collection('users').where('email', '==', email);
+    const snapshot = await userRef.get();
+
+    if (snapshot.empty) {
+      return res.status(401).json({ error: 'Credenciais inválidas' });
+    }
+
+    // Assume que há apenas um usuário com o mesmo e-mail (ou você pode tratar esse caso)
+    const user = snapshot.docs[0].data();
+
+    if (user.password !== password) {
+      return res.status(401).json({ error: 'Credenciais inválidas' });
+    }
+
+    if (user.status === 'active') {
+      return res.status(400).json({ error: 'Usuário já está logado' });
+    }
+
+    // Atualiza o status para "active" no Firestore
+    await db.collection('users').doc(snapshot.docs[0].id).update({ status: 'active' });
+
+    res.json({ message: 'Login bem-sucedido', user: { id: snapshot.docs[0].id, email: user.email, status: 'active' } });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+// Rota para fazer o logout
+app.post('/logout', async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    // Consulta o usuário no Firestore
+    const userRef = db.collection('users').where('email', '==', email);
+    const snapshot = await userRef.get();
+
+    if (snapshot.empty) {
+      return res.status(401).json({ error: 'Credenciais inválidas' });
+    }
+
+    // Assume que há apenas um usuário com o mesmo e-mail (ou você pode tratar esse caso)
+    const user = snapshot.docs[0].data();
+
+    if (user.status === 'inactive') {
+      return res.status(400).json({ error: 'Usuário já está deslogado' });
+    }
+
+    // Atualiza o status para "inactive" no Firestore
+    await db.collection('users').doc(snapshot.docs[0].id).update({ status: 'inactive' });
+
+    res.json({ message: 'Logout bem-sucedido', user: { id: snapshot.docs[0].id, email: user.email, status: 'inactive' } });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
 // Endpoint para obter todos os usuarios da base de dados
 app.get('/users', async (req, res) => {
   try {
@@ -311,31 +498,93 @@ app.get('/users', async (req, res) => {
 
 // EndPoint para criar um usuario no banco de dados
 app.post('/users/add', async (req, res) => {
+  const { name , email, password, imageURL} = req.body;
+  const newUser = 
+  {
+  name,
+  email,
+  password,
+  imageURL,
+  level: 0,
+  admin: password === 'capyba' ? true : false,
+  verified: false,
+  created_at: new Date(),
+  updated_at: new Date(),
+  deleted_at: new Date(),
+  status: "inactive",
+  }
+  
   try {
-    const user = req.body;
-    if (!user.name || !user.email || !user.password) {
+    
+    if (!newUser.name || !newUser.email || !newUser.password) {
       res.status(400).send('Todos os campos devem ser preenchidos');
       return
     }
-    const isDuplicate = await db.collection('users').where('email', '==', user.email).get();
+    const isDuplicate = await db.collection('users').where('email', '==', newUser.email).get();
     if (isDuplicate.docs.length > 0) {
-      res.status(409).send('Este usuaário ja existe');
+      res.status(409).send('Este usuário ja existe');
       return
     }
 
-    const newUser = await db.collection('users').add(user);
-    if (!newUser) {
-      res.status(409).send('Este usuaário ja existe');
+    const createresponse = await db.collection('users').add(newUser);
+
+    if (!createresponse) {
+      res.status(409).send('Este usuário ja existe');
       return
     }
     // adiciona chave id no objeto
-    await db.collection('users').doc(newUser).update({ id: newUser });
-    res.status(201).json({ id: doc.id, ...user });
+    await db.collection('users').doc(createresponse.id).update({ id: createresponse.id });
+    res.status(201).json({ id: createresponse.id, ...newUser });
   } catch (error) {
     console.error(error);
     res.status(500).send('Erro ao adicionar o usuaário');
   }
 })
+
+// Endpoint para enviar e-mail de validação com token
+app.post('/send-validation-email', (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Gerar um token com o e-mail
+    const token = jwt.sign({ email }, 'secreto', { expiresIn: '1h' });
+
+    // Configurar o e-mail
+    const mailOptions = {
+      from: 'capybaquigrafo@gmail.com',
+      to: email,
+      subject: 'E-mail de Validação',
+      text: `Use o seguinte token para validar seu e-mail: ${token}`,
+    };
+
+    // Enviar o e-mail
+    transporter.sendMail(mailOptions);
+
+    res.status(200).send('E-mail de validação enviado com sucesso',token);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Erro ao enviar e-mail de validação');
+  }
+});
+
+// Endpoint para validar o token de e-mail
+app.post('/validate-email', async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    // Verificar o token
+    const decoded = jwt.verify(token, 'secreto');
+
+    // Atualizar o status 'verified' no banco de dados
+    // Substitua isso pela lógica real de atualização no seu banco de dados
+    Exemplo: await db.collection('users').doc(decoded.email).update({ verified: true });
+
+    res.status(200).send('E-mail validado com sucesso');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erro ao validar e-mail');
+  }
+});
 
 // Endpoint para ler um usuario da base de dados
 app.get('/users/:id', async (req, res) => {
@@ -376,17 +625,107 @@ app.delete('/users/delete/:id', async (req, res) => {
 });
 
 
-// Endpoint para obter todos os posts da base de dados
+// Endpoint para obter posts com nível igual a 0 paginados e filtrados por termo de busca, filtro e ordenação
 app.get('/posts', async (req, res) => {
   try {
-  const snapshot = await db.collection('posts').get();
-  const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  res.json(data).status(200);
+    const pageSize = parseInt(req.query.page_size) || 10; // Tamanho padrão da página
+    const page = parseInt(req.query.page) || 1; // Página padrão
+    const searchTerm = req.query.search || ''; // Termo de busca padrão
+    
+    const orderingFields = req.query.ordering || ''; // Campos de ordenação padrão
+
+    // Construir a consulta
+    let query = db.collection('posts').where('level', '==', 0);
+
+    // Aplicar filtro de pesquisa se houver um termo
+    if (searchTerm) {
+      query = query.where('searchField', '>=', searchTerm).where('searchField', '<=', searchTerm + '\uf8ff');
+    }
+
+
+    // Aplicar ordenação se fornecido
+    if (orderingFields) {
+      const orderingArray = orderingFields.split(',');
+      orderingArray.forEach(field => {
+        let order = 'asc';
+        if (field.startsWith('-')) {
+          order = 'desc';
+          field = field.substring(1); // Remover o sinal de menos
+        }
+        query = query.orderBy(field, order);
+      });
+    }
+
+    const totalSnapshot = await query.get();
+
+    // Aplicar limites e offset para a paginação
+    const snapshot = await query.limit(pageSize).offset((page - 1) * pageSize).get();
+
+    const totalItems = totalSnapshot.docs.length;
+    const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+    res.json({
+      total_items: totalItems,
+      items: data,
+    }).status(200);
+
   } catch (error) {
     console.error(error);
     res.status(500).send('Erro ao obter os dados');
   }
 });
+
+
+// Endpoint para obter posts com nível igual a 1 paginados e filtrados por termo de busca, filtro e ordenação
+app.get('/secrets', async (req, res) => {
+  try {
+    const pageSize = parseInt(req.query.page_size) || 10; // Tamanho padrão da página
+    const page = parseInt(req.query.page) || 1; // Página padrão
+    const searchTerm = req.query.search || ''; // Termo de busca padrão
+    
+    const orderingFields = req.query.ordering || ''; // Campos de ordenação padrão
+
+    // Construir a consulta
+    let query = db.collection('posts').where('level', '==', 1);
+
+    // Aplicar filtro de pesquisa se houver um termo
+    if (searchTerm) {
+      query = query.where('searchField', '>=', searchTerm).where('searchField', '<=', searchTerm + '\uf8ff');
+    }
+
+
+    // Aplicar ordenação se fornecido
+    if (orderingFields) {
+      const orderingArray = orderingFields.split(',');
+      orderingArray.forEach(field => {
+        let order = 'asc';
+        if (field.startsWith('-')) {
+          order = 'desc';
+          field = field.substring(1); // Remover o sinal de menos
+        }
+        query = query.orderBy(field, order);
+      });
+    }
+
+    const totalSnapshot = await query.get();
+
+    // Aplicar limites e offset para a paginação
+    const snapshot = await query.limit(pageSize).offset((page - 1) * pageSize).get();
+
+    const totalItems = totalSnapshot.docs.length;
+    const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+    res.json({
+      total_items: totalItems,
+      items: data,
+    }).status(200);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erro ao obter os dados');
+  }
+});
+
 
 // Endpoint para adicionar um novo post
 app.post('/posts/add', async (req, res) => {
