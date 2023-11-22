@@ -46,61 +46,61 @@ app.listen(PORT, () => {
   console.log(`Seja Bem-Vindo ao Capybaquigrafo API REST`);
   console.log(`Servidor está ouvindo na porta: ${PORT}`);
  
-  console.log(" ");
-  console.log("Estes são os endpoints disponíveis:");
-  console.log(" ");
+  // console.log(" ");
+  // console.log("Estes são os endpoints disponíveis:");
+  // console.log(" ");
 
-  // Rotas para a categoria "users"
-  console.log("Usuários:");
-  console.log("GET /users - Obter todos os usuários");
-  console.log("GET /users/:id - Obter um usuário por ID");
-  console.log("POST /users/add - Adicionar um novo usuário");
-  console.log("  Corpo da Requisição: { name: 'string', email: 'string', password: 'string', imageURL: 'string (URL)' }");
-  console.log("PUT /users/update/:id - Atualizar um usuário por ID");
-  console.log("  Corpo da Requisição: { name: 'string', email: 'string', password: 'string', imageURL: 'string (URL)' }");
-  console.log("DELETE /users/delete/:id - Excluir um usuário por ID");
-  console.log(" ");
+  // // Rotas para a categoria "users"
+  // console.log("Usuários:");
+  // console.log("GET /users - Obter todos os usuários");
+  // console.log("GET /users/:id - Obter um usuário por ID");
+  // console.log("POST /users/add - Adicionar um novo usuário");
+  // console.log("  Corpo da Requisição: { name: 'string', email: 'string', password: 'string', imageURL: 'string (URL)' }");
+  // console.log("PUT /users/update/:id - Atualizar um usuário por ID");
+  // console.log("  Corpo da Requisição: { name: 'string', email: 'string', password: 'string', imageURL: 'string (URL)' }");
+  // console.log("DELETE /users/delete/:id - Excluir um usuário por ID");
+  // console.log(" ");
 
-  // Rotas para a categoria "posts"
-  console.log("Posts:");
-  console.log("GET /posts - Obter todos os posts");
-  console.log("GET /posts/:id - Obter um post por ID");
-  console.log("POST /posts/add - Adicionar um novo post");
-  console.log("  Corpo da Requisição: { title: 'string', content: 'string', imageURL: 'string (URL)', createdBy: { name: 'string', email: 'string', imageURL: 'string (URL)' } }");
-  console.log("PUT /posts/update/:id - Atualizar um post por ID");
-  console.log("  Corpo da Requisição: { title: 'string', content: 'string', imageURL: 'string (URL)', createdBy: { name: 'string', email: 'string', imageURL: 'string (URL)' } }");
-  console.log("DELETE /posts/delete/:id - Excluir um post por ID");
-  console.log(" ");
+  // // Rotas para a categoria "posts"
+  // console.log("Posts:");
+  // console.log("GET /posts - Obter todos os posts");
+  // console.log("GET /posts/:id - Obter um post por ID");
+  // console.log("POST /posts/add - Adicionar um novo post");
+  // console.log("  Corpo da Requisição: { title: 'string', content: 'string', imageURL: 'string (URL)', createdBy: { name: 'string', email: 'string', imageURL: 'string (URL)' } }");
+  // console.log("PUT /posts/update/:id - Atualizar um post por ID");
+  // console.log("  Corpo da Requisição: { title: 'string', content: 'string', imageURL: 'string (URL)', createdBy: { name: 'string', email: 'string', imageURL: 'string (URL)' } }");
+  // console.log("DELETE /posts/delete/:id - Excluir um post por ID");
+  // console.log(" ");
 
-  // Rotas para a categoria "secrets"
-  console.log("Secrets:");
-  console.log("GET /secrets - Obter todos os posts secretos");
-  console.log("GET /secrets/:id - Obter um post secreto por ID");
-  console.log("POST /secrets/add - Adicionar um novo post secreto");
-  console.log("  Corpo da Requisição: { title: 'string', content: 'string', imageURL: 'string (URL)', createdBy: { name: 'string', email: 'string', imageURL: 'string (URL)' } }");
-  console.log("PUT /secrets/update/:id - Atualizar um post secreto por ID");
-  console.log("  Corpo da Requisição: { title: 'string', content: 'string', imageURL: 'string (URL)', createdBy: { name: 'string', email: 'string', imageURL: 'string (URL)' } }");
-  console.log("DELETE /secrets/delete/:id - Excluir um post secreto por ID");
-  console.log(" ");
+  // // Rotas para a categoria "secrets"
+  // console.log("Secrets:");
+  // console.log("GET /secrets - Obter todos os posts secretos");
+  // console.log("GET /secrets/:id - Obter um post secreto por ID");
+  // console.log("POST /secrets/add - Adicionar um novo post secreto");
+  // console.log("  Corpo da Requisição: { title: 'string', content: 'string', imageURL: 'string (URL)', createdBy: { name: 'string', email: 'string', imageURL: 'string (URL)' } }");
+  // console.log("PUT /secrets/update/:id - Atualizar um post secreto por ID");
+  // console.log("  Corpo da Requisição: { title: 'string', content: 'string', imageURL: 'string (URL)', createdBy: { name: 'string', email: 'string', imageURL: 'string (URL)' } }");
+  // console.log("DELETE /secrets/delete/:id - Excluir um post secreto por ID");
+  // console.log(" ");
 
-  // Rotas para "PDFDOC"
-  console.log("PDF e Documentos:");
-  console.log("POST /upload - Fazer upload de um documento PDF");
-  console.log("  Corpo da Requisição: Formato Multipart com o arquivo PDF");
-  console.log("GET /pdf/termos - Obter o documento PDF de termos");
-  console.log(" ");
+  // // Rotas para "PDFDOC"
+  // console.log("PDF e Documentos:");
+  // console.log("POST /upload - Fazer upload de um documento PDF");
+  // console.log("  Corpo da Requisição: Formato Multipart com o arquivo PDF");
+  // console.log("GET /pdf/termos - Obter o documento PDF de termos");
+  // console.log(" ");
 
-  // Rotas para "AUTHENTICATION"
-  console.log("Autenticação:");
-  console.log("POST /login - Efetuar login");
-  console.log("  Corpo da Requisição: { email: 'string', password: 'string' }");
-  console.log("POST /logout - Efetuar logout");
-  console.log("  Corpo da Requisição: { email: 'string' }");
-  console.log("POST /send-validation-email - Enviar e-mail de validação");
-  console.log("  Corpo da Requisição: { email: 'string' }");
-  console.log("POST /validate-email - Validar e-mail");
-  console.log("  Corpo da Requisição: { token: 'string' }");
-  console.log(" ");
+  // // Rotas para "AUTHENTICATION"
+  // console.log("Autenticação:");
+  // console.log("POST /login - Efetuar login");
+  // console.log("  Corpo da Requisição: { email: 'string', password: 'string' }");
+  // console.log("POST /logout - Efetuar logout");
+  // console.log("  Corpo da Requisição: { email: 'string' }");
+  // console.log("POST /send-validation-email - Enviar e-mail de validação");
+  // console.log("  Corpo da Requisição: { email: 'string' }");
+  // console.log("POST /validate-email - Validar e-mail");
+  // console.log("  Corpo da Requisição: { token: 'string' }");
+  // console.log(" ");
 });
 
 
@@ -456,7 +456,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 
     stream.end(file.buffer);
   } catch (error) {
-    console.error(error);
+    console.log(error);
     res.status(500).send('Erro durante o upload do arquivo.');
   }
 });
