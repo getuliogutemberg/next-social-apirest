@@ -41,7 +41,7 @@ Certifique-se de ter o Node.js instalado. Você pode baixá-lo em [nodejs.org](h
 
     ```bash
     npm start
-    ``
+    ```
     
 O servidor estará acessível em https://capybaquigrafo-apirest.vercel.app/.
 
