@@ -1,4 +1,4 @@
-# Meu Servidor Node.js com Express
+# API
 
 Bem-vindo. Este servidor serve como um ponto de partida para criar aplicativos web.
 Este é um servidor de exemplo construído usando Node.js, Express, Firebase e outras bibliotecas para criar uma API REST. O servidor possui funcionalidades como autenticação de usuários, manipulação de posts, envio de e-mails e upload de documentos PDF.
@@ -46,6 +46,8 @@ Certifique-se de ter o Node.js instalado. Você pode baixá-lo em [nodejs.org](h
 O servidor estará acessível em : https://capybaquigrafo-apirest.vercel.app/.
 
 E configura a aplicaçao demo : https://capybaquigrafo.vercel.app/.
+
+<img src="blob:https://vercel.com/ba422748-785c-4fab-b995-b7a4d6283884" />
 
 
 
