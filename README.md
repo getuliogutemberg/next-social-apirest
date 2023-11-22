@@ -47,7 +47,7 @@ O servidor estará acessível em : https://capybaquigrafo-apirest.vercel.app/.
 
 E configura a aplicaçao demo : https://capybaquigrafo.vercel.app/.
 
-<img src="blob:https://vercel.com/ba422748-785c-4fab-b995-b7a4d6283884" />
+<img src="https://raw.githubusercontent.com/getuliogutemberg/next-social-apirest/main/Captura%20de%20tela%20de%202023-11-21%2023-28-10.png" />
 
 
 
