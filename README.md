@@ -13,6 +13,7 @@ FIREBASE_API_KEY=SuaChaveDoFirebase
 FIREBASE_AUTH_DOMAIN=SeuDominioDoFirebase
 FIREBASE_PROJECT_ID=SeuIDDoProjetoFirebase
 # ... adicione outras variáveis de ambiente necessárias
+```
 
 ## Instalação
 
@@ -22,23 +23,27 @@ Certifique-se de ter o Node.js instalado. Você pode baixá-lo em [nodejs.org](h
 
    ```bash
    git clone https://github.com/getuliogutemberg/next-social-apirest.git
-
+   ```
+   
 2. Navegue até o diretório do projeto:
 
     ```bash
     cd seu-repositorio
+    ```
     
 3. Instale as dependências:
 
     ```bash
     npm install
-
+   ```
+    
 4. Uso
 
 Para iniciar o servidor, use o seguinte comando:
 
     ```bash
     npm start
+   ```
 
 O servidor estará acessível em https://capybaquigrafo-apirest.vercel.app/.
 
