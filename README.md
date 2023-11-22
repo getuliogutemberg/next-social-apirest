@@ -35,7 +35,7 @@ Certifique-se de ter o Node.js instalado. Você pode baixá-lo em [nodejs.org](h
 
     ```bash
     npm install
-   ```
+    ```
     
 4. Uso
 
@@ -44,7 +44,7 @@ Para iniciar o servidor, use o seguinte comando:
     ```bash
     npm start
     ```
-
+    
 O servidor estará acessível em https://capybaquigrafo-apirest.vercel.app/.
 
 
