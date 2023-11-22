@@ -1,40 +1,48 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Instalação
 
-## Getting Started
+    Certifique-se de ter o Node.js instalado em sua máquina.
+    Execute o seguinte comando para instalar as dependências:
 
-First, run the development server:
+bash
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+npm install
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Executando o Servidor
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Após a instalação, você pode iniciar o servidor usando o seguinte comando:
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+bash
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+npm start
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+O servidor estará disponível em http://localhost:3000.
+Endpoints da API
 
-## Learn More
+A API possui os seguintes endpoints:
 
-To learn more about Next.js, take a look at the following resources:
+    Usuários:
+        GET /api/users: Obtém todos os usuários.
+        GET /api/users/:id: Obtém um usuário por ID.
+        POST /api/users: Adiciona um novo usuário.
+        PUT /api/users/:id: Atualiza um usuário existente.
+        DELETE /api/users/:id: Exclui um usuário.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    Posts:
+        GET /api/posts: Obtém todos os posts.
+        GET /api/posts/:id: Obtém um post por ID.
+        POST /api/posts: Adiciona um novo post.
+        PUT /api/posts/:id: Atualiza um post existente.
+        DELETE /api/posts/:id: Exclui um post.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+    Documentos PDF:
+        POST /api/documents/upload: Faz upload de um documento PDF.
+        GET /api/documents/:id: Obtém um documento PDF.
 
-## Deploy on Vercel
+    Outros:
+        POST /api/send-validation-email: Envia e-mail de validação.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Contribuição
+
+Sinta-se à vontade para contribuir com melhorias ou corrigir problemas. Abra um problema (issue) ou envie um pull request!.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
