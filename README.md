@@ -43,7 +43,7 @@ Para iniciar o servidor, use o seguinte comando:
 
     ```bash
     npm start
-   ```
+    ```
 
 O servidor estará acessível em https://capybaquigrafo-apirest.vercel.app/.
 
