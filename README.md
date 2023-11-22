@@ -1,40 +1,77 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# API
 
-## Getting Started
+Bem-vindo. Este servidor serve como um ponto de partida para criar aplicativos web.
+Este é um servidor de exemplo construído usando Node.js, Express, Firebase e outras bibliotecas para criar uma API REST. O servidor possui funcionalidades como autenticação de usuários, manipulação de posts, envio de e-mails e upload de documentos PDF.
 
-First, run the development server:
+## Configuração Inicial
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Antes de executar o servidor, é necessário configurar algumas variáveis de ambiente. Crie um arquivo `.env` na raiz do projeto e adicione as seguintes informações:
+
+```env
+PORT=3000
+FIREBASE_API_KEY=SuaChaveDoFirebase
+FIREBASE_AUTH_DOMAIN=SeuDominioDoFirebase
+FIREBASE_PROJECT_ID=SeuIDDoProjetoFirebase
+# ... adicione outras variáveis de ambiente necessárias
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Instalação
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Certifique-se de ter o Node.js instalado. Você pode baixá-lo em [nodejs.org](https://nodejs.org/).
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+1. Clone este repositório:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+   ```bash
+   git clone https://github.com/getuliogutemberg/next-social-apirest.git
+   ```
+   
+2. Navegue até o diretório do projeto:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+    ```bash
+    cd seu-repositorio
+    ```
+    
+3. Instale as dependências:
 
-## Learn More
+    ```bash
+    npm install
+    ```
+    
+4. Para iniciar o servidor, use o seguinte comando:
 
-To learn more about Next.js, take a look at the following resources:
+    ```bash
+    npm start
+    ```
+    
+O servidor estará acessível em : https://capybaquigrafo-apirest.vercel.app/.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+E configura a aplicaçao demo : https://capybaquigrafo.vercel.app/.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+<img src="blob:https://vercel.com/ba422748-785c-4fab-b995-b7a4d6283884" />
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Endpoints da API
+
+A API possui os seguintes endpoints:
+
+    Usuários:
+        GET /api/users: Obtém todos os usuários.
+        GET /api/users/:id: Obtém um usuário por ID.
+        POST /api/users: Adiciona um novo usuário.
+        PUT /api/users/:id: Atualiza um usuário existente.
+        DELETE /api/users/:id: Exclui um usuário.
+
+    Posts:
+        GET /api/posts: Obtém todos os posts.
+        GET /api/posts/:id: Obtém um post por ID.
+        POST /api/posts: Adiciona um novo post.
+        PUT /api/posts/:id: Atualiza um post existente.
+        DELETE /api/posts/:id: Exclui um post.
+
+    Documentos PDF:
+        POST /api/documents/upload: Faz upload de um documento PDF.
+        GET /api/documents/:id: Obtém um documento PDF.
+
+    Outros:
+        POST /api/send-validation-email: Envia e-mail de validação.
