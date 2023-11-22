@@ -37,9 +37,8 @@ Certifique-se de ter o Node.js instalado. Você pode baixá-lo em [nodejs.org](h
     npm install
     ```
     
-4. Uso
+4. Para iniciar o servidor, use o seguinte comando
 
-Para iniciar o servidor, use o seguinte comando:
 
     
     npm start
