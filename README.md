@@ -1,22 +1,50 @@
-Instalação
+# Meu Servidor Node.js com Express
 
-    Certifique-se de ter o Node.js instalado em sua máquina.
-    Execute o seguinte comando para instalar as dependências:
+Bem-vindo. Este servidor serve como um ponto de partida para criar aplicativos web.
+Este é um servidor de exemplo construído usando Node.js, Express, Firebase e outras bibliotecas para criar uma API REST. O servidor possui funcionalidades como autenticação de usuários, manipulação de posts, envio de e-mails e upload de documentos PDF.
 
-bash
+## Configuração Inicial
 
-npm install
+Antes de executar o servidor, é necessário configurar algumas variáveis de ambiente. Crie um arquivo `.env` na raiz do projeto e adicione as seguintes informações:
 
-Executando o Servidor
+```env
+PORT=3000
+FIREBASE_API_KEY=SuaChaveDoFirebase
+FIREBASE_AUTH_DOMAIN=SeuDominioDoFirebase
+FIREBASE_PROJECT_ID=SeuIDDoProjetoFirebase
+# ... adicione outras variáveis de ambiente necessárias
 
-Após a instalação, você pode iniciar o servidor usando o seguinte comando:
+## Instalação
 
-bash
+Certifique-se de ter o Node.js instalado. Você pode baixá-lo em [nodejs.org](https://nodejs.org/).
 
-npm start
+1. Clone este repositório:
 
-O servidor estará disponível em http://localhost:3000.
-Endpoints da API
+   ```bash
+   git clone https://github.com/getuliogutemberg/next-social-apirest.git
+
+2. Navegue até o diretório do projeto:
+
+    ```bash
+    cd seu-repositorio
+    
+3. Instale as dependências:
+
+    ```bash
+    npm install
+
+4. Uso
+
+Para iniciar o servidor, use o seguinte comando:
+
+    ```bash
+    npm start
+
+O servidor estará acessível em https://capybaquigrafo-apirest.vercel.app/.
+
+
+
+## Endpoints da API
 
 A API possui os seguintes endpoints:
 
@@ -40,9 +68,3 @@ A API possui os seguintes endpoints:
 
     Outros:
         POST /api/send-validation-email: Envia e-mail de validação.
-
-Contribuição
-
-Sinta-se à vontade para contribuir com melhorias ou corrigir problemas. Abra um problema (issue) ou envie um pull request!.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
